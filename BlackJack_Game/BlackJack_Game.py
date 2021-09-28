@@ -56,7 +56,7 @@ while not stay:
 # Dealer's turn
 if dealer_won == False:
     print('Dealer`s Turn')
-    dealer_threshold =  21 - 11
+    dealer_threshold = 21 - 7 # can add a probability function that calculates the likelihood of getting a good card
 
     while dealer_hand_value < dealer_threshold:
         dealer_cards.append(my_deck.deal_one())
@@ -64,7 +64,12 @@ if dealer_won == False:
         print(f'Dealer adds card: hand value = {dealer_hand_value}')
 
     # End Game dynamics
-    dealer_hand_value += dealer_special_card.value
+    dealer_cards.append(dealer_special_card)
+    dealer_hand_value = classes.hand_value(dealer_cards)
+    print('Dealer Cards:')
+    for card in dealer_cards:
+        print(f'   {card}')
+
     print(f'Dealer hand value = {dealer_hand_value}')
     player_diff = 21 - player_hand_value
 

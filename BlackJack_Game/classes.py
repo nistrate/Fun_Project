@@ -18,9 +18,9 @@ ranks = ("Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
 # Note: For now we will treat the Ace as being values at 1, however
 # in the next iteration of the script, we will make it worth 1 or 10 (depending on the context of the game)
 
-values = {"Two":2, "Three":3, "Four":4, "Five":5, "Six":6,
-          "Seven":7, "Eight":8, "Nine":9, "Ten":10,
-         "Jack":10, "Queen":10, "King":10, "Ace":1}
+values = {"Two":[2], "Three":[3], "Four":[4], "Five":[5], "Six":[6],
+          "Seven":[7], "Eight":[8], "Nine":[9], "Ten":[10],
+         "Jack":[10], "Queen":[10], "King":[10], "Ace": [1,10]}
 
 # Now, let's implement some classes.
 
@@ -119,8 +119,38 @@ class Dealer():
     #         self.value += card.value
 
 
+
 def hand_value(your_card_list):
-    value = 0
+    val = []
     for card in your_card_list:
-        value += card.value
-    return value
+        if len(val) == 0:
+            for idx in range (len(card.value)):
+                val.append(card.value[idx])
+        else:
+            temp_val = val
+            val = []
+            for i in range(len(temp_val)):
+                for j in range(len(card.value)):
+                    val.append(temp_val[i]+card.value[j])
+    valid_values = [x for x in val if x <= 21]
+    if len(valid_values) == 0:
+        return min(val)
+    else:
+        return max(valid_values)
+
+if __name__ == "__main__":
+    my_hand = []
+    my_hand.append(Card("Two", "Spades"))
+    my_hand.append(Card("Two", "Spades"))
+    my_hand.append(Card("Ace", "Spades"))
+    my_hand.append(Card("Three", "Spades"))
+    my_hand.append(Card("Ace", "Spades"))
+    my_hand.append(Card("Two", "Spades"))
+    print(f'{hand_value(my_hand)} <- must be 20')
+
+    my_hand = []
+    my_hand.append(Card("Ace", "Spades"))
+    my_hand.append(Card("Ace", "Spades"))
+    my_hand.append(Card("Ace", "Spades"))
+    print(f'{hand_value(my_hand)} <- must be 21')
+
